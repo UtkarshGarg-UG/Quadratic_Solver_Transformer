@@ -1,5 +1,7 @@
 * The fully trained model has >99.65% of accuracy on validation set
 
+![Attention Maps]("Attention maps.png")
+
 # Setting Up Environment
 * cd into the code folder
 * create a virtual env using pip: python -m venv YOUR_ENV_NAME
