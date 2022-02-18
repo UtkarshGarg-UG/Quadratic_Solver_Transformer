@@ -29,7 +29,7 @@
 * It also has code to run on your own data
 
 # Observations
-1. Solving for "a" and "c" in (ax**2 + bx + c) is much easy for the model as it requires a single step of multiplication. The hard part is solving for "b". It requires an intermediate step of multiplying then adding. Eg. (-2x + 34) * (4x - 2) = -8x**2 + 4x + 136x - 68 = -8x**2 +140x -68. So, "b" = 140
+1. Solving for "a" and "c" in (ax<sup>2</sup> + bx + c) is much easy for the model as it requires a single step of multiplication. The hard part is solving for "b". It requires an intermediate step of multiplying then adding. Eg. (-2x + 34) * (4x - 2) = -8x<sup>2</sup> + 4x + 136x - 68 = -8x<sup>2</sup> +140x -68. So, "b" = 140
 This is where the model makes the most mistakes (2.8% out of 3% test error)
 
 2. Model fails to generalize for numbers that are out of its training range (for large positive and negative numbers). This is in line with the finding of this emnlp 2019 paper: “Do NLP Models Know Numbers? Probing Numeracy in Embeddings”
@@ -37,8 +37,8 @@ from Allen Institute for AI (AI2) et.al
 
 3. And finally how does the model "solve" the equations? We can analyse this using attention maps. In the image, we can see 4 Attention Heads. If we look closely, we can see what the model actually "sees" to get the values.
 
-Eg. (from validation set) To calculate the constant 8 in 8n**2, we can see the model attends to 4 (head 3) from first factor and 2 (head 2) from second.
-Further, the n in 8n**2 focuses on the two n's in the factors (x-axis).
+Eg. (from validation set) To calculate the constant 8 in 8n<sup>2</sup>, we can see the model attends to 4 (head 3) from first factor and 2 (head 2) from second.
+Further, the n in 8x<sup>2</sup> focuses on the two n's in the factors (x-axis).
 To get the sign for "+28", the model focuses (head 1) on the two negative signs of the factors 🤯! Also, interestingly, the model focuses on all the brackets of the factors for the middle numbers. I wonder why.
 
 
