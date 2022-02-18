@@ -1,5 +1,6 @@
 # Evaluation
 
+* The fully trained model has >99.65% of accuracy on validation set
 * We expect the test file to be names test.txt
 * Format for test.txt => -8*x*(3\*x+14)=-24*x*\*2-112\*x
 * It returns the accuracy (exact match)

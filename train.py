@@ -220,7 +220,7 @@ def main(device, train_data_path, model_params, source_column = 'factors',
     #train from checkpoint
     if resume_from_checkpoint:
         print('Loading Checkpoint ...')
-        checkpoint = torch.load(checkpoint_path)
+        checkpoint = torch.load(checkpoint_path, map_location=device)
         print('Setting Models state to checkpoint...')
         assert checkpoint['model_params'] == model_params
         model.load_state_dict(checkpoint['model_state_dict'])
