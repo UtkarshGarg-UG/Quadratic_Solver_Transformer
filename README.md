@@ -1,6 +1,6 @@
 * The fully trained model has >99.65% of accuracy on validation set
 
-![Attention Maps](maps.png)
+<img src="maps.png" alt="Drawing" style="width: 200px;"/>
 
 # Setting Up Environment
 * cd into the code folder
