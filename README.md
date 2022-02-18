@@ -19,7 +19,7 @@
 * Download data:  https://scale-static-assets.s3-us-west-2.amazonaws.com/ml-interview/expand/train.txt
 * The main file is train.py
 * It contains the main training loop
-* Format of train.txt expected: -8*x*(3\*x+14)=-24*x*\*2-112\*x
+* Format of train.txt expected: -8*x*(3\*x+14)=-24*x<sup>2</sup>-112*x
 * For optional arguments help, use python train.py --help. Arguments have been defined at the bottom.
 * The model parameters are saved in model_config.json
 * You have an option to train from checkpoint using optional arguments: python main.py --load_checkpoint_path LOAD_PATH --save_checkpoint_path SAVE_PATH --resume_training True
