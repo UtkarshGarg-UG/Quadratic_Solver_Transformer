@@ -1,7 +1,6 @@
 * The fully trained model has >99.65% of accuracy on validation set
 
 # Setting Up Environment
-* 
 * cd into the code folder
 * create a virtual env using pip: python -m venv YOUR_ENV_NAME
 * activate the env: source YOUR_ENV_NAME/bin/activate
