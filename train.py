@@ -104,7 +104,7 @@ def epoch_time(start_time, end_time):
         return elapsed_mins, elapsed_secs   
     
 
-def checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_module, checkpoint_path):
+def checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_module, save_checkpoint_path):
     """
     desc:
         creates checkpoint for the model
@@ -115,7 +115,7 @@ def checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_mo
         epoch: checkpoint epoch
         model_params: hyperparams of model
         data_module: object of DataModule => contains the datasets and vocabulary
-        checkpoint_path: path to save checkpoint. Include checkpoint name
+        save_checkpoint_path: path to save checkpoint. Include checkpoint name
     """
     
     torch.save({'model_state_dict': model.state_dict(),
@@ -126,7 +126,7 @@ def checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_mo
                         'source_stoi': data_module.train_dataset.source_vocab.stoi,
                         'source_itos': data_module.train_dataset.source_vocab.itos,
                         'target_stoi': data_module.train_dataset.target_vocab.stoi,
-                        'target_itos': data_module.train_dataset.target_vocab.itos}, checkpoint_path)
+                        'target_itos': data_module.train_dataset.target_vocab.itos}, save_checkpoint_path)
 
     
 
@@ -135,7 +135,8 @@ def checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_mo
 def main(device, train_data_path, model_params, source_column = 'factors', 
              target_column = 'expressions', batch_size = 512, val_frac = 0.1, 
                  learning_rate = 0.0005, n_epochs = 10, early_stopping_limit = 3, 
-                     checkpoint_path = 'checkpoints/checkpoint.pt', resume_from_checkpoint = False):
+                     save_checkpoint_path = None, load_checkpoint_path = None,
+                         resume_from_checkpoint = False):
     
 
     """
@@ -158,8 +159,9 @@ def main(device, train_data_path, model_params, source_column = 'factors',
         learning_rate: float: learning rate for the optimizer
         n_epochs: int: number of epochs
         early_stopping_limit: int: wait for these many epochs before early stopping due to non-reduction of val loss
-        checkpoint_path: str: path to save/load the checkpoint 
-        resume_from_checkpoint: bool: if True, it resumes the training from checkpoint at checkpoint_path
+        save_checkpoint_path: str: path to save the checkpoint 
+        load_checkpoint_path: str: path to load the checkpoint 
+        resume_from_checkpoint: bool: if True, it resumes the training from checkpoint at load_checkpoint_path
         
     return:
         None
@@ -220,7 +222,7 @@ def main(device, train_data_path, model_params, source_column = 'factors',
     #train from checkpoint
     if resume_from_checkpoint:
         print('Loading Checkpoint ...')
-        checkpoint = torch.load(checkpoint_path, map_location=device)
+        checkpoint = torch.load(load_checkpoint_path, map_location=device)
         print('Setting Models state to checkpoint...')
         assert checkpoint['model_params'] == model_params
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -264,7 +266,7 @@ def main(device, train_data_path, model_params, source_column = 'factors',
             early_stopping_counter = 0
             best_valid_loss = valid_loss
             #create checkpoint
-            checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_module, checkpoint_path)
+            checkpoint_builder(model, optimizer, criterion, epoch, model_params, data_module, save_checkpoint_path)
         
         else:
             early_stopping_counter += 1
@@ -292,7 +294,8 @@ def init_argparse():
     arg_parser.add_argument('--lr', default=0.0005, type=int, help='learning rate')
     arg_parser.add_argument('--epochs', default=150, type=int, help='num epochs')
     arg_parser.add_argument('--early_stop_count', default=5, type=int, help='early stopping count')
-    arg_parser.add_argument('--checkpoint_path', default='checkpoints/checkpoint.pt', type=str, help='checkpoint path')
+    arg_parser.add_argument('--save_checkpoint_path', default='checkpoints/checkpoint_train.pt', type=str, help='save checkpoint path')
+    arg_parser.add_argument('--load_checkpoint_path', default='checkpoints/checkpoint_test_time.pt', type=str, help='load checkpoint path')
     arg_parser.add_argument('--resume_training', default=False, type=bool, help='resume training from checkpoint')
 
     return (arg_parser.parse_args())
@@ -302,7 +305,7 @@ if __name__ == "__main__":
     
     args = init_argparse()
     
-    if os.path.isfile(args.checkpoint_path):
+    if os.path.isfile(args.save_checkpoint_path):
         print('!!!!!!!!!!!!!!!!!!!!!!!!')
         print('WARNING! checkpoint already exists. \nConsider using another name to save new checkpoint')
         print('!!!!!!!!!!!!!!!!!!!!!!!!\n')
@@ -335,7 +338,8 @@ if __name__ == "__main__":
             learning_rate = args.lr, 
             n_epochs = args.epochs, 
             early_stopping_limit = args.early_stop_count, 
-            checkpoint_path = args.checkpoint_path, 
+            save_checkpoint_path = args.save_checkpoint_path, 
+            load_checkpoint_path = args.load_checkpoint_path, 
             resume_from_checkpoint = args.resume_training
     )
     

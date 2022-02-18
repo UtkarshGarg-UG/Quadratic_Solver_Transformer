@@ -1,11 +1,19 @@
+* The fully trained model has >99.65% of accuracy on validation set
+
+# Setting Up Environment
+* 
+* cd into the code folder
+* create a virtual env using pip: python -m venv YOUR_ENV_NAME
+* activate the env: source YOUR_ENV_NAME/bin/activate
+* run: pip install -r requirements.txt
+
 # Evaluation
 
-* The fully trained model has >99.65% of accuracy on validation set
-* We expect the test file to be names test.txt
+* We expect the test file to be named test.txt
 * Format for test.txt => -8*x*(3\*x+14)=-24*x*\*2-112\*x
 * It returns the accuracy (exact match)
 * Then run
-    > python main.py -t
+     > python main.py -t
 
 
 # Training
@@ -15,7 +23,7 @@
 * Format of train.txt expected: -8*x*(3\*x+14)=-24*x*\*2-112\*x
 * For optional arguments help, use python train.py --help. Arguments have been defined at the bottom.
 * The model parameters are saved in model_config.json
-* You have an option to train from checkpoint using optional arguments: python main.py --checkpoint_path PATH and --resume_training True
+* You have an option to train from checkpoint using optional arguments: python main.py --load_checkpoint_path LOAD_PATH --save_checkpoint_path SAVE_PATH --resume_training True
 
 # Attention Maps
 * You can use the jupyter notebook "attention_maps" for building attention maps
@@ -55,6 +63,8 @@ arg_parser.add_argument('--epochs', default=150, type=int, help='num epochs')
 
 arg_parser.add_argument('--early_stop_count', default=5, type=int, help='early stopping count')
 
-arg_parser.add_argument('--checkpoint_path', default='checkpoints/checkpoint.pt', type=str, help='checkpoint path')
+arg_parser.add_argument('--save_checkpoint_path', default='checkpoints/checkpoint_train.pt', type=str, help='save checkpoint path')
+
+arg_parser.add_argument('--load_checkpoint_path', default='checkpoints/checkpoint_test_time.pt', type=str, help='load checkpoint path')
 
 arg_parser.add_argument('--resume_training', default=False, type=bool, help='resume training from checkpoint')

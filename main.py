@@ -63,7 +63,7 @@ def main(filepath: str):
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    checkpoint_path = 'checkpoints/checkpoint.pt'
+    checkpoint_path = 'checkpoints/checkpoint_test_time.pt'
     
     evaluation = Evaluation(device, checkpoint_path)
     print("Predicting Factors ....")
